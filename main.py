@@ -6,12 +6,13 @@ def changeSpeed(sound, speed=1.0):
 
 #Crea una linea de musica
 def createMusicLine():
+    instrument = input("Inserta el instrumento para esta linea (P para piano, G para Guitarra): ")
     audioFinal = 0
     exit = 1
     while(exit==1):
         noteName = input("Inserta el nombre de la nota: ")
         noteDuration = int(input("Inserta la duración de la nota: "))
-        route = 'Samples/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
+        route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
         audioFinal += audio
         exit = int(input("Si quiere segir añadiendo, escriba 1, si ya termino, escriba 0: "))
