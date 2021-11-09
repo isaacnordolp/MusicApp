@@ -20,7 +20,7 @@ fast = speed_change(half, 1.5)
 combineWhole = whole+whole
 combineHalf = half+half+half+half
 combineQuarter = quarter+quarter+quarter+quarter+quarter+quarter+quarter+quarter
-combineEigth = eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth+eigth
+combineEigth = eigth+eigth+eigth+eigth
 
 
 #Exports the results
