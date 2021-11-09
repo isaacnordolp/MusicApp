@@ -18,16 +18,9 @@ fast = speed_change(half, 1.5)
 
 #Joins 2 or more audios
 combineWhole = whole+whole
-combineHalf = half+half+half+half
-combineQuarter = quarter+quarter+quarter+quarter+quarter+quarter+quarter+quarter
-combineEigth = eigth+eigth+eigth+eigth
 
 
 #Exports the results
 overlay.export("overlay.wav", format="wav")
 fast.export("fast.wav", format="wav")
 combineWhole.export("combineWhole.wav", format="wav")
-combineHalf.export("combineHalf.wav", format="wav")
-combineQuarter.export("combineQuarter.wav", format="wav")
-combineEigth.export("combineEigth.wav", format="wav")
-
