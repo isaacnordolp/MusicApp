@@ -1,4 +1,4 @@
 print("hola Diana")
-a = 2;
+a = 32;
 if a>1:
     print(a)
