@@ -1,9 +1,9 @@
 from pydub import AudioSegment
 
 #Recibe la entrada del usuario
-notes =["A","B","C","D","E","F","G"]
-notValidString = "Entrada no válida"
 def getInput(status):
+    notes =["A","B","C","D","E","F","G"]
+    notValidString = "Entrada no válida"
     statusList = ["instrument","note","duration","nextState"]
     match status:
         case "instrument":
@@ -31,10 +31,9 @@ def getInput(status):
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
                 elif notValid or octave > 7 or octave < 1:
                     print(notValidString+": "+"Octava o Nota no válida")
-
-                elif lUserIn ==2:
+                elif lUserIn == 2:
                     return userIn
-                elif lUserIn == 3:  
+                elif lUserIn == 3: 
                     if userIn[1] == "#":
                         if noteIndex != 1 and noteIndex != 4:
                             return userIn
@@ -42,7 +41,6 @@ def getInput(status):
                             print(notValidString+": "+"Sostenido no válido")
                     elif userIn[1] == "b":
                         if noteIndex != 2 and noteIndex != 5:
-
                             return notes[noteIndex-1]+ "#" + octaveIn
                         else:
                             print(notValidString+": "+"Bemol no válido")
@@ -81,25 +79,14 @@ def createMusicLine():
     exit = 1
     while(exit==1):
         noteName = input("\nInserta el nombre de la nota: ")
-        #Permite insertar los bemoles también
-        if len(noteName) == 3 and noteName[1] == 'b':
-            octave = noteName[2]
-            noteName = noteName[0:2]
-            noteName = specialNotes.get(noteName) + octave
         noteDuration = input("Inserta la duración de la nota: ")
+        route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
+        audio = AudioSegment.from_file(route, format="wav")
         #Esto es para las duraciones intermedias
         if (noteDuration == '2.'):
-            route = 'Samples/'+ instrument +'/whole/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
             audio = audio[0:1500]
         elif (noteDuration == '4.'):
-            route = 'Samples/'+ instrument +'/half/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
             audio = audio[0:750]
-        #Esto es para las duraciones normales
-        else:
-            route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
         audioFinal += audio
         exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
     return audioFinal
@@ -132,8 +119,7 @@ def createTextLine(textFile):
         exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
         textFile.write(str(exit)+"\n")
 
-durations ={'1':"whole", '2':"half", '4':"quarter", '8':"eigth"}
-specialNotes = {'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#'}
+durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
