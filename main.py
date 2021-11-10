@@ -15,10 +15,7 @@ def getUniqueName(fileName, format):
 
 #Recibe y restringe las entradas del usuario
 def getInput(status):
-    notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
-    specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
     notValidString = "Entrada no válida"
-    statusList = ["instrument","note","duration","nextState"]
     match status:
         case "instrument":
             while (True):
@@ -46,16 +43,40 @@ def getInput(status):
                 if userIn == "HELP":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
                 elif notValid:
-                    print(notValidString+": Octava o Nota no válida")
+                    print(notValidString+": Nota no válida")
                 else: 
                     if note in notes:
                         return note + octave
                     elif note in specialNotes:
                         return specialNotes.get(note) + octave
         case "duration":
-            return 3
-        case "nextState":
-            return 4
+            while (True):
+                userIn = input("Inserta la duración de la nota: ")
+                if(userIn in durations):
+                    return userIn
+                else:
+                    print(notValidString+": Duración no válida")
+        case "nextNote":
+            while(True):
+                userIn = input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: ")
+                if(userIn == '1' or userIn == '0'):
+                    return userIn
+                else:
+                    print(notValidString)
+        case "nextLine":
+            while(True):
+                userIn = input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: ")
+                if(userIn == '1' or userIn == '0'):
+                    return userIn
+                else:
+                    print(notValidString)
+        case "nextAction":
+            while(True):
+                userIn = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .txt\n'F' para finalizar el programa\n").upper()
+                if(userIn == 'A' or userIn == 'G' or userIn == 'T' or userIn == 'F'):
+                    return userIn
+                else:
+                    print(notValidString+": Acción no válida")
      
 #Cambia la velocidad del audio
 def changeSpeed(sound, speed):
@@ -127,14 +148,19 @@ def createTextFile():
     textFile.close()
     print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
+notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
+specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
 durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
 action = ""
 while(action != 'F'):
-    action = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'F' para finalizar el programa\n")
+    action = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .txt\n'F' para finalizar el programa\n")
     if action == "A":
         createMusicFile()
     elif action == "T":
         createTextFile()
+    elif action == "G":
+        input = 
+        createMusicFile()
