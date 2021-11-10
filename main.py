@@ -159,7 +159,7 @@ def getInput(status):
         case "instrument":
             while (True):
                 userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ").upper()
-                if userIn == "help":
+                if userIn == "HELP":
                     print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
                 elif userIn == "P" or userIn == "G":
                     return userIn
