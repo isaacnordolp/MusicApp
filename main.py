@@ -1,4 +1,3 @@
-from os import execv
 from pydub import AudioSegment
 import os
 
