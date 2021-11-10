@@ -1,5 +1,64 @@
 from pydub import AudioSegment
 
+#Recibe la entrada del usuario
+notes =["A","B","C","D","E","F","G"]
+notValidString = "Entrada no válida"
+def getInput(status):
+    statusList = ["instrument","note","duration","nextState"]
+    match status:
+        case "instrument":
+            while (True):
+                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+                if userIn == "help":
+                    print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
+                elif userIn == "P" or userIn == "G":
+                    return userIn
+                else:
+                    print(notValidString) 
+        case "note":
+            while (True):
+                userIn = input("\nInserta el nombre de la nota: ")
+                lUserIn= len(userIn)
+                notValid = False
+                noteIn = userIn[0]
+                octaveIn = userIn[-1]
+                try:
+                    noteIndex = notes.index(noteIn)
+                    octave = int(octaveIn)
+                    
+                except:
+                    notValid = True
+                if userIn == "help":
+                    print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
+                elif notValid or octave > 7 or octave < 1:
+                    print(notValidString)
+
+                elif lUserIn ==2:
+                    return userIn
+                elif lUserIn == 3:  
+                    if userIn[1] == "#":
+                        if noteIndex != 7 or noteIndex != 4:
+                            return userIn
+                        else: 
+                            print(notValidString)
+                    elif userIn[1] == "b":
+                        if noteIndex != 0 or noteIndex != 5:
+
+                            return notes[noteIndex-1]+ "#" + octaveIn
+                        else:
+                            print(notValidString)
+                else:
+                    print (notValidString) 
+
+            return 2
+        case "duration":
+            return 3
+        case "nextState":
+            return 4
+        
+
+
+
 #Cambia la velocidad del archivo
 def changeSpeed(sound, speed=1.0):
     finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
@@ -23,11 +82,11 @@ def createMusicFile():
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    instrument = getInput("instrument")
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = input("\nInserta el nombre de la nota: ")
+        noteName = getInput("note")
         if len(noteName) == 3 and noteName[1] == 'b':
             octave = noteName[2]
             noteName = noteName[0:2]
