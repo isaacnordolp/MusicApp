@@ -40,7 +40,7 @@ Para introducir una nota, MusicApp requiere dos datos:
 
     - Finalmente se inserta la octava. MusicApp permite 7 octavas (1-7) , que abarcan aproximadamente todas las notas de un piano tradicional.
 
-    ![piano](/Pictures/piano.png)
+         ![piano](/Pictures/piano.png)
 
     - Por ejemplo, si quieres añadir la nota Do de la octava 4, debes escribir esto:
       > "Inserta el nombre de la nota: " C4
@@ -64,7 +64,7 @@ Para introducir una nota, MusicApp requiere dos datos:
 2. Duración
     - Hay 4 duraciones básicas: 1 (redonda), 2 (blanca), 4 (negra) y 8 (corchea).
 
-    ![notes](/Pictures/notes.png)
+        ![notes](/Pictures/notes.png)
     
     - Las duraciones siguen la lógica estandar de la teoría musical:
       - La nota redonda tiene la duración más larga entre todas.
@@ -85,6 +85,8 @@ Para introducir una nota, MusicApp requiere dos datos:
     - Las notas blanca (2) y negra (4) permiten añadir un punto para denotar una duración extra del 50% respecto a su valor original, siguiendo la notación musical tradicional:
       > "Inserta el nombre de la nota: " Bb3  
       > "Inserta la duración de la nota: " 2.
+
+        ![dot](/Pictures/dot.jpg)
 
     - A continuación, algunos ejemplos de duraciones erroneas:
       > 5 <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8'  
