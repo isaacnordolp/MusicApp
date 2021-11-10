@@ -1,4 +1,17 @@
 from pydub import AudioSegment
+import os
+
+#Genera nombres únicos para guardar los archivos
+def getUniqueName(fileName, format):
+    finalName = fileName + format
+    if(os.path.isfile(finalName)):
+        i = 1
+        while(os.path.isfile(finalName)):
+            finalName = fileName + '(' + str(i) +')' + format
+            i = i + 1
+        return finalName
+    else:
+        return finalName
 
 #Recibe y restringe las entradas del usuario
 def getInput(status):
@@ -81,12 +94,13 @@ def createMusicFile():
     for i in range(1, len(audioArray)):
         audioFinal = audioFinal.overlay(audioArray[i], position=0)
     audioFinal = changeSpeed(audioFinal, tempo)
-    audioFinal.export(fileName+'.wav', format="wav")
-    print('Tu obra "'+ fileName + '.wav" fue guardada con éxito.')
+    finalName = getUniqueName(fileName, ".wav")
+    audioFinal.export(finalName, format="wav")
+    print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
 #Crea una linea de texto
 def createTextLine(textFile):
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
     textFile.write(instrument+"\n")
     exit = 1
     while(exit==1):
@@ -101,7 +115,8 @@ def createTextLine(textFile):
 def createTextFile():
     newLine = 1
     fileName = input("\nInserta el nombre de la pieza: ")
-    textFile= open(fileName+".txt","w+")
+    finalName = getUniqueName(fileName, ".txt")
+    textFile= open(finalName,"w+")
     textFile.write(fileName+"\n")
     tempo = input("Inserta el tempo (BPM) de la pieza: ")
     textFile.write(tempo+"\n")
@@ -110,7 +125,7 @@ def createTextFile():
         newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
         textFile.write(str(newLine)+"\n")
     textFile.close()
-    print('Tu obra "'+ fileName + '.txt" fue guardada con éxito.')
+    print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
 durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
