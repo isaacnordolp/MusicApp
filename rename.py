@@ -1,7 +1,7 @@
 import os
 
 d =['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
-for i in range(7):
+for i in range(1, 8):
 	for j in range(12):
 		numero = (12*i) + j
 		numeroArchivo = f"{(2*numero) + 1:03d}"

@@ -8,10 +8,10 @@ def getInput(status):
     match status:
         case "instrument":
             while (True):
-                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ").upper()
+                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ").upper()
                 if userIn == "HELP":
                     print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
-                elif userIn == "P" or userIn == "G":
+                elif userIn == "P" or userIn == "G" or userIn == "C":
                     return userIn
                 else:
                     print(notValidString+": "+"Instrumento no encontrado") 
@@ -74,7 +74,7 @@ def createMusicFile():
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
     audioFinal = 0
     exit = 1
     while(exit==1):
