@@ -24,8 +24,7 @@ def getInput(status):
                 octaveIn = userIn[-1]
                 try:
                     noteIndex = notes.index(noteIn)
-                    octave = int(octaveIn)
-                    
+                    octave = int(octaveIn)                  
                 except:
                     notValid = True
                 if userIn == "help":
@@ -49,7 +48,6 @@ def getInput(status):
                             print(notValidString+": "+"Bemol no válido")
                 else:
                     print (notValidString) 
-
         case "duration":
             return 3
         case "nextState":
