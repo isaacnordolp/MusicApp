@@ -7,16 +7,16 @@ def changeSpeed(sound, speed=1.0):
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = input("Inserta el instrumento para esta linea (P para piano, G para Guitarra): ")
+    instrument = input("Elige el instrumento para esta linea (P = piano, G = Guitarra): ")
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = input("Elige el nombre de la nota: ")
+        noteName = input("Inserta el nombre de la nota: ")
         noteDuration = int(input("Inserta la duración de la nota: "))
         route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
         audioFinal += audio
-        exit = int(input("Si quiere segir añadiendo, escriba 1, si ya termino, escriba 0: "))
+        exit = int(input("Para añadir otra nota escriba 1, si no, escriba 0: "))
     return audioFinal
 
 #Crea el archivo de musica
@@ -26,16 +26,17 @@ def createMusicFile():
 
     while(newLine==1):
         audioArray.append(createMusicLine())
-        newLine = int(input("Inserta 1 si quieres añadir otra linea musical o 0 si ya terminaste: "))
+        newLine = int(input("Para añadir otra linea musical escribe 1, si no, escribe 0: "))
     
     audioFinal = audioArray[0]
     for i in range(1, len(audioArray)):
         audioFinal = audioFinal.overlay(audioArray[i], position=0)
-    tempo = int(input("Elige el tempo (BPM) de la pieza: "))/120
+    tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
     audioFinal = changeSpeed(audioFinal, tempo)
     fileName = input("Inserta el nombre de la pieza: ")
     audioFinal.export(fileName+'.wav', format="wav")
 
 durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
-print("<<< MusicApp >>>")
+print("BIENVENIDO A MUSIC APP")
+print("----------------------")
 createMusicFile()
