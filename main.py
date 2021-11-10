@@ -3,7 +3,7 @@ from pydub import AudioSegment
 #Recibe y restringe las entradas del usuario
 def getInput(status):
     notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
-    specialNotes = {"Cb":"B","Db":"C#","Eb":"D#","Fb":"E","Gb":"F#","Ab":"G#","Bb":"A#","B#":"C","E#":"F"}
+    specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","Ab":"G#","Bb":"A#","B#":"C","E#":"F"}
     notValidString = "Entrada no válida"
     statusList = ["instrument","note","duration","nextState"]
     match status:
@@ -19,7 +19,7 @@ def getInput(status):
         case "note":
             while (True):
                 notValid = False
-                userIn = input("\nInserta el nombre de la nota: ")
+                userIn = input("\nInserta el nombre de la nota: ").upper()
                 if len(userIn) == 2:
                     note = userIn[0]
                 elif len(userIn) == 3:
@@ -30,7 +30,7 @@ def getInput(status):
                         notValid = True  
                 except:
                     notValid = True              
-                if userIn == "help":
+                if userIn == "HELP":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
                 elif notValid:
                     print(notValidString+": Octava o Nota no válida")
