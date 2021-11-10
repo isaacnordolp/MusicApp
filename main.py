@@ -1,6 +1,6 @@
 from pydub import AudioSegment
 
-#Recibe la entrada del usuario
+#Recibe y restringe las entradas del usuario
 def getInput(status):
     notes =["A","B","C","D","E","F","G"]
     notValidString = "Entrada no válida"
@@ -14,63 +14,49 @@ def getInput(status):
                 elif userIn == "P" or userIn == "G" or userIn == "C":
                     return userIn
                 else:
-                    print(notValidString+": "+"Instrumento no encontrado") 
+                    print(notValidString+": Instrumento no encontrado") 
         case "note":
             while (True):
-                userIn = input("\nInserta el nombre de la nota: ")
-                lUserIn= len(userIn)
                 notValid = False
-                noteIn = userIn[0]
-                octaveIn = userIn[-1]
+                userIn = input("\nInserta el nombre de la nota: ")
+                note = userIn[0]
+                octave = userIn[-1]
                 try:
-                    noteIndex = notes.index(noteIn)
-                    octave = int(octaveIn)                  
+                    noteIndex = notes.index(note)
+                    octave = int(octave)                  
                 except:
                     notValid = True
                 if userIn == "help":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
                 elif notValid or octave > 7 or octave < 1:
-                    print(notValidString+": "+"Octava o Nota no válida")
-                elif lUserIn == 2:
+                    print(notValidString+": Octava o Nota no válida")
+                elif len(userIn) == 2:
                     return userIn
-                elif lUserIn == 3: 
+                elif len(userIn) == 3: 
                     if userIn[1] == "#":
                         if noteIndex != 1 and noteIndex != 4:
                             return userIn
                         else: 
-                            print(notValidString+": "+"Sostenido no válido")
+                            print(notValidString+": Sostenido no válido")
                     elif userIn[1] == "b":
                         if noteIndex != 2 and noteIndex != 5:
-                            return notes[noteIndex-1]+ "#" + octaveIn
+                            return notes[noteIndex-1]+ "#" + octave
                         else:
-                            print(notValidString+": "+"Bemol no válido")
+                            print(notValidString+": Bemol no válido")
                 else:
-                    print (notValidString) 
+                    print(notValidString) 
         case "duration":
             return 3
         case "nextState":
             return 4
      
-#Cambia la velocidad del archivo
-def changeSpeed(sound, speed=1.0):
-    finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
-    return finalSound.set_frame_rate(sound.frame_rate)
-
-#Crea el archivo de musica
-def createMusicFile():
-    newLine = 1
-    audioArray = []
-    fileName = input("\nInserta el nombre de la pieza: ")
-    tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
-    while(newLine==1):
-        audioArray.append(createMusicLine())
-        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
-    audioFinal = audioArray[0]
-    for i in range(1, len(audioArray)):
-        audioFinal = audioFinal.overlay(audioArray[i], position=0)
-    audioFinal = changeSpeed(audioFinal, tempo)
-    audioFinal.export(fileName+'.wav', format="wav")
-    print('Tu obra "'+ fileName + '.wav" fue guardada con éxito.')
+#Cambia la velocidad del audio
+def changeSpeed(sound, speed):
+    if speed == 1:
+        return sound
+    else:
+        finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
+        return finalSound.set_frame_rate(sound.frame_rate)
 
 #Crea una linea de musica
 def createMusicLine():
@@ -91,6 +77,35 @@ def createMusicLine():
         exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
     return audioFinal
 
+#Crea el archivo de musica
+def createMusicFile():
+    newLine = 1
+    audioArray = []
+    fileName = input("\nInserta el nombre de la pieza: ")
+    tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
+    while(newLine==1):
+        audioArray.append(createMusicLine())
+        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
+    audioFinal = audioArray[0]
+    for i in range(1, len(audioArray)):
+        audioFinal = audioFinal.overlay(audioArray[i], position=0)
+    audioFinal = changeSpeed(audioFinal, tempo)
+    audioFinal.export(fileName+'.wav', format="wav")
+    print('Tu obra "'+ fileName + '.wav" fue guardada con éxito.')
+
+#Crea una linea de texto
+def createTextLine(textFile):
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    textFile.write(instrument+"\n")
+    exit = 1
+    while(exit==1):
+        noteName = input("\nInserta el nombre de la nota: ")
+        textFile.write(noteName+"\n")
+        noteDuration = input("Inserta la duración de la nota: ")
+        textFile.write(noteDuration+"\n")
+        exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
+        textFile.write(str(exit)+"\n")
+
 #Crea el archivo de texto
 def createTextFile():
     newLine = 1
@@ -105,19 +120,6 @@ def createTextFile():
         textFile.write(str(newLine)+"\n")
     textFile.close()
     print('Tu obra "'+ fileName + '.txt" fue guardada con éxito.')
-
-#Crea una linea de texto
-def createTextLine(textFile):
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
-    textFile.write(instrument+"\n")
-    exit = 1
-    while(exit==1):
-        noteName = input("\nInserta el nombre de la nota: ")
-        textFile.write(noteName+"\n")
-        noteDuration = input("Inserta la duración de la nota: ")
-        textFile.write(noteDuration+"\n")
-        exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
-        textFile.write(str(exit)+"\n")
 
 durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
