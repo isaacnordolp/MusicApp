@@ -12,6 +12,10 @@ def createMusicLine():
     exit = 1
     while(exit==1):
         noteName = input("Inserta el nombre de la nota: ")
+        if len(noteName) == 3 and noteName[1] == 'b':
+            octave = noteName[2]
+            noteName = noteName[0:2]
+            noteName = specialNotes.get(noteName) + octave
         noteDuration = int(input("Inserta la duración de la nota: "))
         route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
@@ -40,6 +44,8 @@ def createMusicFile():
         finish = int(input('Tu obra "'+ fileName + '.wav" fue guardada con éxito.\nPara crear una nueva obra, presiona 1. Para finalizar presiona 0: '))
 
 durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
-print("BIENVENIDO A MUSIC APP")
-print("----------------------")
+specialNotes = {'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#'}
+print("--------------------------")
+print("♪ BIENVENIDO A MUSIC APP ♪")
+print("--------------------------")
 createMusicFile()
