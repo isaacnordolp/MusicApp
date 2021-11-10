@@ -79,7 +79,7 @@ def createMusicFile():
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    instrument = getInput("instrument")
     audioFinal = 0
     exit = 1
     while(exit==1):
