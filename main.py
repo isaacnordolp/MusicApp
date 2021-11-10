@@ -82,20 +82,30 @@ def createMusicFile():
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = getInput("instrument")
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = getInput("note")
+        noteName = input("\nInserta el nombre de la nota: ")
         if len(noteName) == 3 and noteName[1] == 'b':
             octave = noteName[2]
             noteName = noteName[0:2]
             noteName = specialNotes.get(noteName) + octave
-        noteDuration = int(input("Inserta la duración de la nota: "))
-        route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
-        audio = AudioSegment.from_file(route, format="wav")
+        noteDuration = input("Inserta la duración de la nota: ")
+        #Esto es para añadir duraciones intermedias
+        if (noteDuration == '2.'):
+            route = 'Samples/'+ instrument +'/whole/' + noteName + '.wav' 
+            audio = AudioSegment.from_file(route, format="wav")
+            audio = audio[0:1500]
+        elif (noteDuration == '4.'):
+            route = 'Samples/'+ instrument +'/half/' + noteName + '.wav' 
+            audio = AudioSegment.from_file(route, format="wav")
+            audio = audio[0:750]
+        else:
+            route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
+            audio = AudioSegment.from_file(route, format="wav")
         audioFinal += audio
-        exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
+        exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
     return audioFinal
 
 #Crea el archivo de texto
