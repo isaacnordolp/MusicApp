@@ -81,10 +81,14 @@ Para introducir una nota, MusicApp requiere dos datos:
     - Por ejemplo, para añadir un silencio con duración de redonda , debes escribir esto:
       > "Inserta el nombre de la nota: " S  
       > "Inserta la duración de la nota: " 1
+      
+    - Las notas blanca (2) y negra (4) permiten añadir un punto para denotar una duración extra del 50% respecto a su valor original, siguiendo la notación musical tradicional:
+      > "Inserta el nombre de la nota: " Bb3  
+      > "Inserta la duración de la nota: " 2.
 
     - A continuación, algunos ejemplos de duraciones erroneas:
-      > 5 <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8' 
-      > 1. <--- Las notas de duración 1 y 8 no permiten poner el punto  
+      > 5 <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8'  
+      > 1\. <--- Las notas de duración 1 y 8 no permiten poner el punto  
 
  ## Líneas de música 
 En MusicApp puedes crear varias lineas de música en un mismo archivo para generar armonía.
