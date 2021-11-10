@@ -3,7 +3,7 @@ from pydub import AudioSegment
 #Recibe y restringe las entradas del usuario
 def getInput(status):
     notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
-    specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","Ab":"G#","Bb":"A#","B#":"C","E#":"F"}
+    specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
     notValidString = "Entrada no válida"
     statusList = ["instrument","note","duration","nextState"]
     match status:
@@ -46,11 +46,8 @@ def getInput(status):
      
 #Cambia la velocidad del audio
 def changeSpeed(sound, speed):
-    if speed == 1:
-        return sound
-    else:
-        finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
-        return finalSound.set_frame_rate(sound.frame_rate)
+    finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
+    return finalSound.set_frame_rate(sound.frame_rate)
 
 #Crea una linea de musica
 def createMusicLine():
