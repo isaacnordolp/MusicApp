@@ -1,5 +1,6 @@
 from pydub import AudioSegment
 
+#Cambia la velocidad del archivo
 def changeSpeed(sound, speed=1.0):
     finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
     return finalSound.set_frame_rate(sound.frame_rate)
@@ -10,7 +11,7 @@ def createMusicLine():
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = input("Inserta el nombre de la nota: ")
+        noteName = input("Elige el nombre de la nota: ")
         noteDuration = int(input("Inserta la duración de la nota: "))
         route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
@@ -18,6 +19,7 @@ def createMusicLine():
         exit = int(input("Si quiere segir añadiendo, escriba 1, si ya termino, escriba 0: "))
     return audioFinal
 
+#Crea el archivo de musica
 def createMusicFile():
     newLine = 1
     audioArray = []
@@ -29,13 +31,11 @@ def createMusicFile():
     audioFinal = audioArray[0]
     for i in range(1, len(audioArray)):
         audioFinal = audioFinal.overlay(audioArray[i], position=0)
-
-    fileName = input("Inserta el nombre de tu cancion: ")
+    tempo = int(input("Elige el tempo (BPM) de la pieza: "))/120
+    audioFinal = changeSpeed(audioFinal, tempo)
+    fileName = input("Inserta el nombre de la pieza: ")
     audioFinal.export(fileName+'.wav', format="wav")
 
 durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
 print("<<< MusicApp >>>")
 createMusicFile()
-
-#Changes speed (also changes pitch)
-#fast = changeSpeed(half, 1.5)
