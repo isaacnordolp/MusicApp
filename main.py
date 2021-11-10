@@ -2,7 +2,8 @@ from pydub import AudioSegment
 
 #Recibe y restringe las entradas del usuario
 def getInput(status):
-    notes =["A","B","C","D","E","F","G"]
+    notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
+    specialNotes = {"Cb":"B","Db":"C#","Eb":"D#","Fb":"E","Gb":"F#","Ab":"G#","Bb":"A#","B#":"C","E#":"F"}
     notValidString = "Entrada no válida"
     statusList = ["instrument","note","duration","nextState"]
     match status:
@@ -19,32 +20,25 @@ def getInput(status):
             while (True):
                 notValid = False
                 userIn = input("\nInserta el nombre de la nota: ")
-                note = userIn[0]
-                octave = userIn[-1]
+                if len(userIn) == 2:
+                    note = userIn[0]
+                elif len(userIn) == 3:
+                    note = userIn[0:2]
                 try:
-                    noteIndex = notes.index(note)
-                    octave = int(octave)                  
+                    octave = int(userIn[-1]) 
+                    if(note not in notes and note not in specialNotes) or octave > 7 or octave < 1:
+                        notValid = True  
                 except:
-                    notValid = True
+                    notValid = True              
                 if userIn == "help":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
-                elif notValid or octave > 7 or octave < 1:
+                elif notValid:
                     print(notValidString+": Octava o Nota no válida")
-                elif len(userIn) == 2:
-                    return userIn
-                elif len(userIn) == 3: 
-                    if userIn[1] == "#":
-                        if noteIndex != 1 and noteIndex != 4:
-                            return userIn
-                        else: 
-                            print(notValidString+": Sostenido no válido")
-                    elif userIn[1] == "b":
-                        if noteIndex != 2 and noteIndex != 5:
-                            return notes[noteIndex-1]+ "#" + octave
-                        else:
-                            print(notValidString+": Bemol no válido")
-                else:
-                    print(notValidString) 
+                else: 
+                    if note in notes:
+                        return note + octave
+                    elif note in specialNotes:
+                        return specialNotes.get(note) + octave
         case "duration":
             return 3
         case "nextState":
