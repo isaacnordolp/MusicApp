@@ -50,11 +50,11 @@ def getInput(status):
                 else:
                     print (notValidString) 
 
-            return 2
         case "duration":
             return 3
         case "nextState":
             return 4
+        
         
 #Cambia la velocidad del archivo
 def changeSpeed(sound, speed=1.0):
