@@ -1,6 +1,12 @@
 from pydub import AudioSegment
 import os
 
+#Listas y diccionarios usados
+notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
+specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
+durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
+notValidString = "Entrada no válida"
+
 #Genera nombres únicos para guardar los archivos
 def getUniqueName(fileName, format):
     finalName = fileName + format
@@ -15,7 +21,6 @@ def getUniqueName(fileName, format):
 
 #Recibe y restringe las entradas del usuario
 def getInput(status):
-    notValidString = "Entrada no válida"
     match status:
         case "instrument":
             while (True):
@@ -148,9 +153,6 @@ def createTextFile():
     textFile.close()
     print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
-notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
-specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
-durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
