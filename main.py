@@ -8,13 +8,13 @@ def getInput(status):
     match status:
         case "instrument":
             while (True):
-                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ").upper()
                 if userIn == "help":
                     print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
                 elif userIn == "P" or userIn == "G":
                     return userIn
                 else:
-                    print(notValidString) 
+                    print(notValidString+": "+"Instrumento no encontrado") 
         case "note":
             while (True):
                 userIn = input("\nInserta el nombre de la nota: ")
@@ -31,31 +31,31 @@ def getInput(status):
                 if userIn == "help":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
                 elif notValid or octave > 7 or octave < 1:
-                    print(notValidString)
+                    print(notValidString+": "+"Octava o Nota no válida")
 
                 elif lUserIn ==2:
                     return userIn
                 elif lUserIn == 3:  
                     if userIn[1] == "#":
-                        if noteIndex != 7 or noteIndex != 4:
+                        if noteIndex != 1 and noteIndex != 4:
                             return userIn
                         else: 
-                            print(notValidString)
+                            print(notValidString+": "+"Sostenido no válido")
                     elif userIn[1] == "b":
-                        if noteIndex != 0 or noteIndex != 5:
+                        if noteIndex != 2 and noteIndex != 5:
 
                             return notes[noteIndex-1]+ "#" + octaveIn
                         else:
-                            print(notValidString)
+                            print(notValidString+": "+"Bemol no válido")
                 else:
                     print (notValidString) 
 
-            return 2
         case "duration":
             return 3
         case "nextState":
             return 4
-        
+
+
 #Cambia la velocidad del archivo
 def changeSpeed(sound, speed=1.0):
     finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
