@@ -83,7 +83,7 @@ def createMusicLine():
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = input("\nInserta el nombre de la nota: ")
+        noteName = getInput("note")
         #Permite insertar los bemoles también
         if len(noteName) == 3 and noteName[1] == 'b':
             octave = noteName[2]
