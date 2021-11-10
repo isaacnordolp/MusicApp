@@ -136,14 +136,14 @@ def createTextLine(textFile):
         exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
         textFile.write(str(exit)+"\n")
 
-durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
+durations ={'1':"whole", '2':"half", '4':"quarter", '8':"eigth"}
 specialNotes = {'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#'}
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
 action = ""
-while(action != '0'):
-    action = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'0' para finalizar el programa\n")
+while(action != 'F'):
+    action = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'F' para finalizar el programa\n")
     if action == "A":
         createMusicFile()
     elif action == "T":
