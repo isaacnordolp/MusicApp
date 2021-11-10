@@ -1,66 +1,86 @@
 from os import execv
 from pydub import AudioSegment
+import os
 
-#Recibe la entrada del usuario
-notes =["A","B","C","D","E","F","G"]
-notValidString = "Entrada no válida"
+#Genera nombres únicos para guardar los archivos
+def getUniqueName(fileName, format):
+    finalName = fileName + format
+    if(os.path.isfile(finalName)):
+        i = 1
+        while(os.path.isfile(finalName)):
+            finalName = fileName + '(' + str(i) +')' + format
+            i = i + 1
+        return finalName
+    else:
+        return finalName
+
+#Recibe y restringe las entradas del usuario
 def getInput(status):
+    notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
+    specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
+    notValidString = "Entrada no válida"
     statusList = ["instrument","note","duration","nextState"]
     match status:
         case "instrument":
             while (True):
-                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ").upper()
+                userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ").upper()
                 if userIn == "HELP":
                     print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
-                elif userIn == "P" or userIn == "G":
+                elif userIn == "P" or userIn == "G" or userIn == "C":
                     return userIn
                 else:
-                    print(notValidString+": "+"Instrumento no encontrado") 
+                    print(notValidString+": Instrumento no encontrado") 
         case "note":
             while (True):
-                userIn = input("\nInserta el nombre de la nota: ")
-                lUserIn= len(userIn)
                 notValid = False
-                noteIn = userIn[0]
-                octaveIn = userIn[-1]
+                userIn = input("\nInserta el nombre de la nota: ").upper()
+                if len(userIn) == 2:
+                    note = userIn[0]
+                elif len(userIn) == 3:
+                    note = userIn[0:2]
                 try:
-                    noteIndex = notes.index(noteIn)
-                    octave = int(octaveIn)
-                    
+                    octave = int(userIn[-1]) 
+                    if(note not in notes and note not in specialNotes) or octave > 7 or octave < 1:
+                        notValid = True  
                 except:
-                    notValid = True
-                if userIn == "help":
+                    notValid = True              
+                if userIn == "HELP":
                     print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
-                elif notValid or octave > 7 or octave < 1:
-                    print(notValidString+": "+"Octava o Nota no válida")
-
-                elif lUserIn ==2:
-                    return userIn
-                elif lUserIn == 3:  
-                    if userIn[1] == "#":
-                        if noteIndex != 1 and noteIndex != 4:
-                            return userIn
-                        else: 
-                            print(notValidString+": "+"Sostenido no válido")
-                    elif userIn[1] == "b":
-                        if noteIndex != 2 and noteIndex != 5:
-
-                            return notes[noteIndex-1]+ "#" + octaveIn
-                        else:
-                            print(notValidString+": "+"Bemol no válido")
-                else:
-                    print (notValidString) 
-
+                elif notValid:
+                    print(notValidString+": Octava o Nota no válida")
+                else: 
+                    if note in notes:
+                        return note + octave
+                    elif note in specialNotes:
+                        return specialNotes.get(note) + octave
         case "duration":
             return 3
         case "nextState":
             return 4
-        
-        
-#Cambia la velocidad del archivo
-def changeSpeed(sound, speed=1.0):
+     
+#Cambia la velocidad del audio
+def changeSpeed(sound, speed):
     finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
     return finalSound.set_frame_rate(sound.frame_rate)
+
+#Crea una linea de musica
+def createMusicLine():
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
+    audioFinal = 0
+    exit = 1
+    while(exit==1):
+        noteName = input("\nInserta el nombre de la nota: ")
+        noteDuration = input("Inserta la duración de la nota: ")
+        route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
+        audio = AudioSegment.from_file(route, format="wav")
+        #Esto es para las duraciones intermedias
+        if (noteDuration == '2.'):
+            audio = audio[0:1500]
+        elif (noteDuration == '4.'):
+            audio = audio[0:750]
+        audioFinal += audio
+        exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
+    return audioFinal
 
 #Crea el archivo de musica
 def createMusicFile():
@@ -75,64 +95,13 @@ def createMusicFile():
     for i in range(1, len(audioArray)):
         audioFinal = audioFinal.overlay(audioArray[i], position=0)
     audioFinal = changeSpeed(audioFinal, tempo)
-    audioFinal.export(fileName+'.wav', format="wav")
-    print('Tu obra "'+ fileName + '.wav" fue guardada con éxito.')
-
-#Crea una linea de musica
-def createMusicLine():
-    try:
-        instrument = getInput("instrument")
-    except:
-        instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
-    audioFinal = 0
-    exit = 1
-    while(exit==1):
-        try:
-            noteName = getInput("note")
-        except:
-            noteName = input("\nInserta el nombre de la nota: ")
-
-        #Permite insertar los bemoles también
-        if len(noteName) == 3 and noteName[1] == 'b':
-            octave = noteName[2]
-            noteName = noteName[0:2]
-            noteName = specialNotes.get(noteName) + octave
-        noteDuration = input("Inserta la duración de la nota: ")
-        #Esto es para las duraciones intermedias
-        if (noteDuration == '2.'):
-            route = 'Samples/'+ instrument +'/whole/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
-            audio = audio[0:1500]
-        elif (noteDuration == '4.'):
-            route = 'Samples/'+ instrument +'/half/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
-            audio = audio[0:750]
-        #Esto es para las duraciones normales
-        else:
-            route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
-            audio = AudioSegment.from_file(route, format="wav")
-        audioFinal += audio
-        exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
-    return audioFinal
-
-#Crea el archivo de texto
-def createTextFile():
-    newLine = 1
-    fileName = input("\nInserta el nombre de la pieza: ")
-    textFile= open(fileName+".txt","w+")
-    textFile.write(fileName+"\n")
-    tempo = input("Inserta el tempo (BPM) de la pieza: ")
-    textFile.write(tempo+"\n")
-    while(newLine==1):
-        createTextLine(textFile)
-        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
-        textFile.write(str(newLine)+"\n")
-    textFile.close()
-    print('Tu obra "'+ fileName + '.txt" fue guardada con éxito.')
+    finalName = getUniqueName(fileName, ".wav")
+    audioFinal.export(finalName, format="wav")
+    print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
 #Crea una linea de texto
 def createTextLine(textFile):
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
+    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
     textFile.write(instrument+"\n")
     exit = 1
     while(exit==1):
@@ -143,8 +112,23 @@ def createTextLine(textFile):
         exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
         textFile.write(str(exit)+"\n")
 
-durations ={'1':"whole", '2':"half", '4':"quarter", '8':"eigth"}
-specialNotes = {'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#'}
+#Crea el archivo de texto
+def createTextFile():
+    newLine = 1
+    fileName = input("\nInserta el nombre de la pieza: ")
+    finalName = getUniqueName(fileName, ".txt")
+    textFile= open(finalName,"w+")
+    textFile.write(fileName+"\n")
+    tempo = input("Inserta el tempo (BPM) de la pieza: ")
+    textFile.write(tempo+"\n")
+    while(newLine==1):
+        createTextLine(textFile)
+        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
+        textFile.write(str(newLine)+"\n")
+    textFile.close()
+    print('Tu obra "'+ finalName + '" fue guardada con éxito.')
+
+durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
