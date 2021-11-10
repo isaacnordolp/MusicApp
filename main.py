@@ -56,9 +56,6 @@ def getInput(status):
         case "nextState":
             return 4
         
-
-
-
 #Cambia la velocidad del archivo
 def changeSpeed(sound, speed=1.0):
     finalSound = sound._spawn(sound.raw_data, overrides={"frame_rate": int(sound.frame_rate * speed)})
@@ -87,12 +84,13 @@ def createMusicLine():
     exit = 1
     while(exit==1):
         noteName = input("\nInserta el nombre de la nota: ")
+        #Permite insertar los bemoles también
         if len(noteName) == 3 and noteName[1] == 'b':
             octave = noteName[2]
             noteName = noteName[0:2]
             noteName = specialNotes.get(noteName) + octave
         noteDuration = input("Inserta la duración de la nota: ")
-        #Esto es para añadir duraciones intermedias
+        #Esto es para las duraciones intermedias
         if (noteDuration == '2.'):
             route = 'Samples/'+ instrument +'/whole/' + noteName + '.wav' 
             audio = AudioSegment.from_file(route, format="wav")
@@ -101,6 +99,7 @@ def createMusicLine():
             route = 'Samples/'+ instrument +'/half/' + noteName + '.wav' 
             audio = AudioSegment.from_file(route, format="wav")
             audio = audio[0:750]
+        #Esto es para las duraciones normales
         else:
             route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
             audio = AudioSegment.from_file(route, format="wav")
