@@ -16,7 +16,7 @@ def createMusicLine():
         route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
         audioFinal += audio
-        exit = int(input("Para añadir otra nota escriba 1, si no, escriba 0: "))
+        exit = int(input("Para añadir otra nota escribe 1, si no, escribe 0: "))
     return audioFinal
 
 #Crea el archivo de musica
@@ -37,7 +37,7 @@ def createMusicFile():
         audioFinal = changeSpeed(audioFinal, tempo)
         fileName = input("Inserta el nombre de la pieza: ")
         audioFinal.export(fileName+'.wav', format="wav")
-        finish = int(input('Tu obra "'+ fileName + '.wav" fue guardada con éxito.\nPara crear una nueva obra, presiona 1. Para finalizar presiona 0'))
+        finish = int(input('Tu obra "'+ fileName + '.wav" fue guardada con éxito.\nPara crear una nueva obra, presiona 1. Para finalizar presiona 0: '))
 
 durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
 print("BIENVENIDO A MUSIC APP")
