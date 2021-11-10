@@ -21,20 +21,23 @@ def createMusicLine():
 
 #Crea el archivo de musica
 def createMusicFile():
-    newLine = 1
-    audioArray = []
+    finish = 1
+    while(finish ==1):
+        newLine = 1
+        audioArray = []
 
-    while(newLine==1):
-        audioArray.append(createMusicLine())
-        newLine = int(input("Para añadir otra linea musical escribe 1, si no, escribe 0: "))
-    
-    audioFinal = audioArray[0]
-    for i in range(1, len(audioArray)):
-        audioFinal = audioFinal.overlay(audioArray[i], position=0)
-    tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
-    audioFinal = changeSpeed(audioFinal, tempo)
-    fileName = input("Inserta el nombre de la pieza: ")
-    audioFinal.export(fileName+'.wav', format="wav")
+        while(newLine==1):
+            audioArray.append(createMusicLine())
+            newLine = int(input("Para añadir otra linea musical escribe 1, si no, escribe 0: "))
+        
+        audioFinal = audioArray[0]
+        for i in range(1, len(audioArray)):
+            audioFinal = audioFinal.overlay(audioArray[i], position=0)
+        tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
+        audioFinal = changeSpeed(audioFinal, tempo)
+        fileName = input("Inserta el nombre de la pieza: ")
+        audioFinal.export(fileName+'.wav', format="wav")
+        finish = int(input('Tu obra "'+ fileName + '.wav" fue guardada con éxito.\nPara crear una nueva obra, presiona 1. Para finalizar presiona 0'))
 
 durations ={1:"whole", 2:"half", 4:"quarter", 8:"eigth"}
 print("BIENVENIDO A MUSIC APP")
