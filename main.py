@@ -1,3 +1,4 @@
+from os import execv
 from pydub import AudioSegment
 
 #Recibe la entrada del usuario
@@ -79,11 +80,18 @@ def createMusicFile():
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = getInput("instrument")
+    try:
+        instrument = getInput("instrument")
+    except:
+        instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra): ")
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = getInput("note")
+        try:
+            noteName = getInput("note")
+        except:
+            noteName = input("\nInserta el nombre de la nota: ")
+
         #Permite insertar los bemoles también
         if len(noteName) == 3 and noteName[1] == 'b':
             octave = noteName[2]
