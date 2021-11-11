@@ -88,7 +88,7 @@ def getInput(status):
                         print(notValidString)
             case "nextAction":
                 while(True):
-                    userIn = input("Inserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .txt\n'F' para finalizar el programa\n").upper()
+                    userIn = input("Inserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .matf\n'F' para finalizar el programa\n").upper()
                     if(userIn == 'A' or userIn == 'G' or userIn == 'T' or userIn == 'F'):
                         return userIn
                     else:
