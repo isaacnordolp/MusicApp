@@ -26,8 +26,9 @@ def returnErrorLine(counter):
 
 #Recibe y restringe las entradas del usuario
 def getInput(status):
+    global textInput
     global lineCounter
-    if(textInput == "0"):
+    if(textInput == 0):
         match status:
             case "instrument":
                 while (True):
@@ -111,9 +112,8 @@ def getInput(status):
                     if userIn == '':
                         notValid = True
                     else:
-                        charArray = userIn.split("")
-                        for i in charArray:
-                            if i in forbiddenCharacters:
+                        for i in range(len(userIn)):
+                            if userIn[i] in forbiddenCharacters:
                                 notValid = True
                                 break
                     if userIn.upper() == "HELP":
@@ -181,13 +181,7 @@ def getInput(status):
                     return userIn
                 else:
                     raise Exception(returnErrorLine(lineCounter))
-            case "nextAction":
-                userIn = file.readLine().upper()
-                lineCounter += 1
-                if(userIn == 'A' or userIn == 'G' or userIn == 'T' or userIn == 'F'):
-                    return userIn
-                else:
-                    raise Exception(returnErrorLine(lineCounter))
+
             case "tempo":
                 notValid = False
                 try:
@@ -208,9 +202,8 @@ def getInput(status):
                 if userIn == '':
                     notValid = True
                 else:
-                    charArray = userIn.split("")
-                    for i in charArray:
-                        if i in forbiddenCharacters:
+                    for i in range(len(userIn)):
+                        if userIn[i] in forbiddenCharacters:
                             notValid = True
                             break
                 if notValid:
@@ -225,12 +218,12 @@ def changeSpeed(sound, speed):
 
 #Crea una linea de musica
 def createMusicLine():
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
+    instrument = getInput("instrument")
     audioFinal = 0
     exit = 1
     while(exit==1):
-        noteName = input("\nInserta el nombre de la nota: ")
-        noteDuration = input("Inserta la duración de la nota: ")
+        noteName = getInput("note")
+        noteDuration = getInput("duration")
         route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
         audio = AudioSegment.from_file(route, format="wav")
         #Esto es para las duraciones intermedias
@@ -239,18 +232,18 @@ def createMusicLine():
         elif (noteDuration == '4.'):
             audio = audio[0:750]
         audioFinal += audio
-        exit = int(input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: "))
+        exit = int(getInput("nextNote"))
     return audioFinal
 
 #Crea el archivo de musica
 def createMusicFile():
     newLine = 1
     audioArray = []
-    fileName = input("\nInserta el nombre de la pieza: ")
-    tempo = int(input("Inserta el tempo (BPM) de la pieza: "))/120
+    fileName = getInput("title")
+    tempo = getInput("tempo")/120
     while(newLine==1):
         audioArray.append(createMusicLine())
-        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
+        newLine = int(getInput("nextLine"))
     audioFinal = audioArray[0]
     for i in range(1, len(audioArray)):
         audioFinal = audioFinal.overlay(audioArray[i], position=0)
@@ -261,41 +254,42 @@ def createMusicFile():
 
 #Crea una linea de texto
 def createTextLine(textFile):
-    instrument = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ")
+    instrument = getInput("instrument")
     textFile.write(instrument+"\n")
     exit = 1
     while(exit==1):
-        noteName = input("\nInserta el nombre de la nota: ")
+        noteName = getInput("note")
         textFile.write(noteName+"\n")
-        noteDuration = input("Inserta la duración de la nota: ")
+        noteDuration = getInput("duration")
         textFile.write(noteDuration+"\n")
-        exit = int(input("\nPara añadir otra nota escribe 1, si no, escribe 0: "))
+        exit = int(getInput("nextNote"))
         textFile.write(str(exit)+"\n")
 
 #Crea el archivo de texto
 def createTextFile():
     newLine = 1
-    fileName = input("\nInserta el nombre de la pieza: ")
+    fileName = getInput("title")
     finalName = getUniqueName(fileName, ".txt")
     textFile= open(finalName,"w+")
     textFile.write(fileName+"\n")
-    tempo = input("Inserta el tempo (BPM) de la pieza: ")
+    tempo = str(getInput("tempo"))
     textFile.write(tempo+"\n")
     while(newLine==1):
         createTextLine(textFile)
-        newLine = int(input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: "))
+        newLine = int(getInput("nextLine"))
         textFile.write(str(newLine)+"\n")
     textFile.close()
     print('Tu obra "'+ finalName + '" fue guardada con éxito.')
 
 global textInput
+textInput = 0
 global lineCounter
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
 action = ""
 while(action != 'F'):
-    action = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .txt\n'F' para finalizar el programa\n")
+    action = getInput("nextAction")
     if action == "A":
         textInput = 0
         createMusicFile()
@@ -307,4 +301,4 @@ while(action != 'F'):
         try:
             createMusicFile()
         except:
-            raise
+            pass
