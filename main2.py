@@ -4,7 +4,7 @@ import os
 #Listas y diccionarios usados
 notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
 specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
-durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
+durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth",'8.':"quarter",'16':"semiquaver" }
 notValidString = "Entrada no válida"
 forbiddenCharacters = ["\\", "/", ':', '*', '?', '"', '<', '>']
 
@@ -49,7 +49,7 @@ def getInput(status):
                     except:
                         notValid = True              
                     if userIn == "HELP":
-                        print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\nNombres de notas: B#/C  C#/Db  D  D#/Eb  E/Fb  E#/F  F#/Gb  G  G#/Ab  A  A#/Bb  B/Cb")
+                        print("Debes ingresar una nota siguiendo: Nota+Octava. Como por ejemplo: C#4 o Db4.\nNombres de notas: B#/C  C#/Db  D  D#/Eb  E/Fb  E#/F  F#/Gb  G  G#/Ab  A  A#/Bb  B/Cb\nPara insertar un silencio, escribe 'S'")
                     elif notValid or userIn == "B#7" or userIn == "CB1":
                         print(notValidString+": Nota no válida")
                     else: 
@@ -67,7 +67,7 @@ def getInput(status):
                 while (True):
                     userIn = input("Inserta la duración de la nota: ").upper()
                     if userIn == "HELP":
-                        print("Debes ingresar una de las siguientes duraciones: 1, 2, 2., 4, 4., 8\n")
+                        print("Puedes ingresar una de las siguientes duraciones:\n1 (redonda)\n2 (blanca)\n2. (blanca con punto)\n4 (negra)\n4. (negra con punto)\n8 (corchea)\n8. (corchea con punto)\n16 (semicorchea)\n")
                     elif(userIn in durations):
                         return userIn
                     else:
@@ -148,6 +148,8 @@ def createMusicLine(array):
             audio = audio[0:1500]
         elif (noteDuration == '4.'):
             audio = audio[0:750]
+        elif (noteDuration == '8.'):
+            audio = audio[0:375]
         audioFinal += audio
         exit = array.pop(0)
     return audioFinal

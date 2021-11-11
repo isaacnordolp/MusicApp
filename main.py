@@ -4,7 +4,7 @@ import os
 #Listas y diccionarios usados
 notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
 specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
-durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth"}
+durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth",'8.':"quarter",'16':"semiquaver" }
 notValidString = "Entrada no válida"
 forbiddenCharacters = ["\\", "/", ':', '*', '?', '"', '<', '>']
 
@@ -34,7 +34,7 @@ def getInput(status):
                 while (True):
                     userIn = input("\nElige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): ").upper()
                     if userIn == "HELP":
-                        print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra")
+                        print("Los instrumentos que puedes elegir son:\nP = Piano\nG = Guitarra\nC = Cuerdas")
                     elif userIn == "P" or userIn == "G" or userIn == "C":
                         return userIn
                     else:
@@ -43,7 +43,9 @@ def getInput(status):
                 while (True):
                     notValid = False
                     userIn = input("\nInserta el nombre de la nota: ").upper()
-                    if len(userIn) == 2:
+                    if userIn == "S":
+                        return userIn
+                    elif len(userIn) == 2:
                         note = userIn[0]
                     elif len(userIn) == 3:
                         note = userIn[0:2]
@@ -54,21 +56,29 @@ def getInput(status):
                     except:
                         notValid = True              
                     if userIn == "HELP":
-                        print("Debes ingresar una nota siguiendo: NombreNota+Octava. Como por ejemplo: C#4 o Db4.\n Nombres de notas: C   C#/Db  D   D#/Eb  E   F   F#/Gb  G   G#/Ab  A   A#/Bb  B")
-                    elif notValid:
+                        print("Debes ingresar una nota siguiendo: Nota+Octava. Como por ejemplo: C#4 o Db4.\nNombres de notas: B#/C  C#/Db  D  D#/Eb  E/Fb  E#/F  F#/Gb  G  G#/Ab  A  A#/Bb  B/Cb\nPara insertar un silencio, escribe 'S'")
+                    elif notValid or userIn == "B#7" or userIn == "CB1":
                         print(notValidString+": Nota no válida")
                     else: 
                         if note in notes:
-                            return note + str(octave)
+                            if note == "B#":
+                                return note + str(octave+1)
+                            else:
+                                return note + str(octave)
                         elif note in specialNotes:
-                            return specialNotes.get(note) + octave
+                            if note == "CB":
+                                return specialNotes.get(note) + str(octave-1)
+                            else:
+                                return specialNotes.get(note) + str(octave)
             case "duration":
                 while (True):
-                    userIn = input("Inserta la duración de la nota: ")
-                    if(userIn in durations):
+                    userIn = input("Inserta la duración de la nota: ").upper()
+                    if userIn == "HELP":
+                        print("Puedes ingresar una de las siguientes duraciones:\n1 (redonda)\n2 (blanca)\n2. (blanca con punto)\n4 (negra)\n4. (negra con punto)\n8 (corchea)\n8. (corchea con punto)\n16 (semicorchea)\n")
+                    elif(userIn in durations):
                         return userIn
                     else:
-                        print(notValidString+": Duración no válida")
+                        print(notValidString+": Duración no válida\n")
             case "nextNote":
                 while(True):
                     userIn = input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: ")
@@ -85,26 +95,28 @@ def getInput(status):
                         print(notValidString)
             case "nextAction":
                 while(True):
-                    userIn = input("\nInserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .txt\n'F' para finalizar el programa\n").upper()
+                    userIn = input("Inserta:\n'A' para crear un archivo de audio\n'T' para crear un archivo de texto\n'G' para generar un audio a partir de un archivo .matf\n'F' para finalizar el programa\n").upper()
                     if(userIn == 'A' or userIn == 'G' or userIn == 'T' or userIn == 'F'):
                         return userIn
                     else:
                         print(notValidString+": Acción no válida")
             case "tempo":
                 while(True):
-                    try:
-                        userIn = int(input("Inserta el tempo (BPM) de la pieza: "))
-                        notValid = False
-                        if(userIn < 60 or userIn >240):
-                            notValid = True
-                    except:
-                        notValid = True
+                    userIn = input("\nInserta el tempo (BPM) de la pieza: ")
+                    notValid = False
                     if userIn == "HELP":
-                        print("Inserta un tempo, expresado en BPM. Sus valores aceptados son 60 - 240")
-                    elif notValid:
-                        print(notValidString+": Tempo no válido")
-                    else: 
-                        return userIn
+                        print("Inserta un tempo, expresado en BPM. Sus valores aceptados van de 60 a 240")
+                    else:
+                        try:
+                            userIn = int(userIn)
+                            if(userIn < 60 or userIn >240):
+                                notValid = True
+                        except:
+                            notValid = True
+                        if notValid:
+                            print(notValidString+": Tempo no válido")
+                        else: 
+                            return userIn
             case "title":
                 while(True):
                     userIn = input("\nInserta el nombre de la pieza: ").strip()
@@ -117,7 +129,7 @@ def getInput(status):
                                 notValid = True
                                 break
                     if userIn.upper() == "HELP":
-                        print("No puedes poner estos caracteres: \, /, :, *, ?, \", <, >, |")
+                        print("No puedes usar estos caracteres: \, /, :, *, ?, \", <, >, |")
                     elif notValid:
                         print(notValidString+": Inserta un nombre válido")
                     else: 
@@ -224,6 +236,8 @@ def createMusicLine():
             audio = audio[0:1500]
         elif (noteDuration == '4.'):
             audio = audio[0:750]
+        elif (noteDuration == '8.'):
+            audio = audio[0:375]
         audioFinal += audio
         exit = int(getInput("nextNote"))
     return audioFinal
@@ -262,7 +276,7 @@ def createTextLine(textFile):
 def createTextFile():
     newLine = 1
     fileName = getInput("title")
-    finalName = getUniqueName(fileName, ".txt")
+    finalName = getUniqueName(fileName, ".matf")
     textFile= open(finalName,"w+")
     textFile.write(fileName+"\n")
     tempo = str(getInput("tempo"))
@@ -293,8 +307,8 @@ while(action != 'F'):
         lineCounter = 0
         try:
             while(True):
-                textFile = input("Introduzca la ruta del archivo '.txt': ")
-                if(os.path.isfile(textFile) and textFile[-4:] == ".txt"):
+                textFile = input("Introduzca la ruta del archivo '.matf': ")
+                if(os.path.isfile(textFile) and textFile[-5:] == ".matf"):
                     file = open(textFile,"r")
                     break
                 else:
