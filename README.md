@@ -8,13 +8,13 @@
       Permite generar un archivo de audio en formato *.wav*
     - **Crear un archivo de texto (T)**
 
-      Permite generar un archivo de texto *.txt* con la información de la obra. Con este archivo, podrás generar el archivo de audio de manera automática en otro momento.
-    - **Generar un audio usando un archivo de texto** 
+      Permite generar un archivo de texto con la información de la obra. Con este archivo, podrás generar el archivo de audio de manera automática en otro momento.
+    - **Generar un audio usando un archivo de texto (G)** 
 
-      Permite generar un archivo de audio de forma automática usando la información almacenada en un archivo *.txt*.
+      Permite generar un archivo de audio de forma automática usando la información almacenada en un archivo *.matf (MusicApp Text File*.
 2. Al elegir las opciones 'A' o 'T', MusicApp te pedirá el nombre de la obra y su tempo (Ver ["Introducción del Tempo"](#tempo)). Tras esto, el programa te guiará para que insertes el nombre de cada nota y su duración correspondiente, de forma lineal (Ver ["Introducción de Notas"](#notas)).
 
-    Al elegir la opción (), solo deberás escribir la ruta donde se encuentra el archivo *.txt*.
+    Al elegir la opción 'G', solo deberás escribir la ruta donde se encuentra el archivo *.matf*.
 4. Al finalizar el proceso, el programa lanzará un mensaje notificando que el archivo ha sido guardado correctamente.
 5. Tras guardar un archivo, el programa te da la opción de crear un nuevo archivo o de escribir F para finalizar el programa.
 
