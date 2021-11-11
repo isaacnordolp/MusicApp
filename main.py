@@ -59,7 +59,7 @@ def getInput(status):
                         print(notValidString+": Nota no válida")
                     else: 
                         if note in notes:
-                            return note + octave
+                            return note + str(octave)
                         elif note in specialNotes:
                             return specialNotes.get(note) + octave
             case "duration":
@@ -91,10 +91,10 @@ def getInput(status):
                     else:
                         print(notValidString+": Acción no válida")
             case "tempo":
-                notValid = False
                 while(True):
                     try:
                         userIn = int(input("Inserta el tempo (BPM) de la pieza: "))
+                        notValid = False
                         if(userIn < 60 or userIn >240):
                             notValid = True
                     except:
@@ -106,9 +106,9 @@ def getInput(status):
                     else: 
                         return userIn
             case "title":
-                notValid = False
                 while(True):
                     userIn = input("\nInserta el nombre de la pieza: ").strip()
+                    notValid = False
                     if userIn == '':
                         notValid = True
                     else:
@@ -123,13 +123,6 @@ def getInput(status):
                     else: 
                         return userIn
     elif(textInput == 1):
-        while(True):
-            textFile = input("Introduzca la ruta del archivo '.txt': ")
-            if(os.path.isfile(textFile) and textFile[-4:] == ".txt"):
-                file = open(textFile,"r")
-                break
-            else:
-                print("La ruta y/o el archivo no son válidos")
         match status:
             case "instrument":
                 userIn = file.readLine()
@@ -157,7 +150,7 @@ def getInput(status):
                     raise Exception(returnErrorLine(lineCounter))
                 else: 
                     if note in notes:
-                        return note + octave
+                        return note + str(octave)
                     elif note in specialNotes:
                         return specialNotes.get(note) + octave
             case "duration":
@@ -299,6 +292,14 @@ while(action != 'F'):
         textInput = 1
         lineCounter = 0
         try:
+            while(True):
+                textFile = input("Introduzca la ruta del archivo '.txt': ")
+                if(os.path.isfile(textFile) and textFile[-4:] == ".txt"):
+                    file = open(textFile,"r")
+                    break
+                else:
+                    print("La ruta y/o el archivo no son válidos")
+            print("Hola")
             createMusicFile()
         except:
             pass
