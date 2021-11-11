@@ -62,7 +62,7 @@ Para introducir una nota, MusicApp requiere dos datos:
       > `F8` <--- La octava 8 se sale del rango permitido (1-7)
 
 2. Duración
-    - Hay 4 duraciones básicas: 1 (redonda), 2 (blanca), 4 (negra) y 8 (corchea).
+    - Hay 5 duraciones básicas: 1 (redonda), 2 (blanca), 4 (negra), 8 (corchea) y 16 (semicorchea).
 
         ![notes](/Pictures/notes.png)
     
@@ -71,6 +71,7 @@ Para introducir una nota, MusicApp requiere dos datos:
       - Dos notas blancas duran lo mismo que una redonda (1 redonda = 2 blancas)
       - Dos notas negras duran lo mismo que una blanca (1 redonda = 2 blancas = 4 negras)
       - Dos corcheas duran lo mismo que una negra (1 redonda = 2 blancas = 4 negras = 8 corcheas)
+      - Dos semicorcheas duran lo mismo que una corchea (1 redonda = 2 blancas = 4 negras = 8 corcheas = 16 semicorcheas)
 
     - Por ejemplo, si quieres la nota Re bemol de la octava 3, con duración de corchea, debes escribir esto:
       > `Inserta el nombre de la nota: Db3`   
@@ -82,15 +83,15 @@ Para introducir una nota, MusicApp requiere dos datos:
       > `Inserta el nombre de la nota: S`   
       > `Inserta la duración de la nota: 1`
       
-    - Las notas blanca (2) y negra (4) permiten añadir un punto para denotar una duración extra del 50% respecto a su valor original, siguiendo la notación musical tradicional:
+    - Las notas blanca (2), negra (4) y corchea (8) permiten añadir un punto para denotar una duración extra del 50% respecto a su valor original, siguiendo la notación musical tradicional:
       > `Inserta el nombre de la nota: Bb3`   
       > `Inserta la duración de la nota: 2.`
 
         ![dot](/Pictures/dot.jpg)
 
     - A continuación, algunos ejemplos de duraciones erroneas:
-      > `5` <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8'  
-      > `1.` <--- Las notas de duración 1 y 8 no permiten poner el punto  
+      > `5` <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8', '8.', '16'  
+      > `1.` <--- Las notas de duración 1 y 16 no permiten poner el punto  
 
  ## Líneas de música 
 En MusicApp puedes crear varias lineas de música en un mismo archivo para generar armonía.
