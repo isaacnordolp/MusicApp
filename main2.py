@@ -1,5 +1,6 @@
 from pydub import AudioSegment
 import os
+from classes import *
 
 #Listas y diccionarios usados
 notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
@@ -35,8 +36,8 @@ def getInput(status):
             case "note":
                 while (True):
                     notValid = False
-                    userIn = input("\nInserta el nombre de la nota. Para finalizar esta línea, digita '0': ").upper()
-                    if userIn == "S" or userIn == "0":
+                    userIn = input("\nInserta el nombre de la nota. Para finalizar esta línea, digita 'Q': ").upper()
+                    if userIn == "S" or userIn == "Q" or userIn == "E":
                         return userIn
                     elif len(userIn) == 2:
                         note = userIn[0]
@@ -49,7 +50,7 @@ def getInput(status):
                     except:
                         notValid = True              
                     if userIn == "HELP":
-                        print("Debes ingresar una nota siguiendo: Nota+Octava. Como por ejemplo: C#4 o Db4.\nNombres de notas: B#/C  C#/Db  D  D#/Eb  E/Fb  E#/F  F#/Gb  G  G#/Ab  A  A#/Bb  B/Cb\nPara insertar un silencio, escribe 'S'")
+                        print("Debes ingresar una nota siguiendo: Nota+Octava. Como por ejemplo: C#4 o Db4.\nNombres de notas: B#/C  C#/Db  D  D#/Eb  E/Fb  E#/F  F#/Gb  G  G#/Ab  A  A#/Bb  B/Cb\nPara insertar un silencio, escribe 'S'\nPara eliminar la nota anterior, escriba 'E'")
                     elif notValid or userIn == "B#7" or userIn == "CB1":
                         print(notValidString+": Nota no válida")
                     else: 
@@ -74,8 +75,8 @@ def getInput(status):
                         print(notValidString+": Duración no válida\n")
             case "nextLine":
                 while(True):
-                    userIn = input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: ")
-                    if(userIn == '1' or userIn == '0'):
+                    userIn = input("\nPara añadir otra linea musical escribe N, si no, escribe Q: ").upper()
+                    if(userIn == 'N' or userIn == 'Q'):
                         return userIn
                     else:
                         print(notValidString)
@@ -127,14 +128,14 @@ def changeSpeed(sound, speed):
     return finalSound.set_frame_rate(sound.frame_rate)
 
 #Crea una linea de musica
-def createMusicLine(array):
-    instrument = array.pop(0)
+def createMusicLine(queue):
+    instrument = queue.remove()
     audioFinal = 0
     exit = "1"
     while(exit=="1"):
-        noteName = array.pop(0)
+        noteName = queue.remove()
         if(noteName != "0"):
-            noteDuration = array.pop(0)
+            noteDuration = queue.remove()
             route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
             audio = AudioSegment.from_file(route, format="wav")
             #Esto es para las duraciones intermedias
@@ -150,14 +151,16 @@ def createMusicLine(array):
     return audioFinal
 
 #Crea el archivo de musica
-def createMusicFile(array):
-    newLine = "1"
+def createMusicFile(stack):
+    newLine = "N"
     audioArray = []
-    fileName = array.pop(0)
-    tempo = int(array.pop(0))/120
-    while(newLine=="1"):
-        audioArray.append(createMusicLine(array))
-        newLine = array.pop(0)
+    queue = Queue()
+    queue.notes = stack.notes
+    fileName = queue.remove()
+    tempo = int(queue.remove())/120
+    while(newLine=="N"):
+        audioArray.append(createMusicLine(queue))
+        newLine = queue.remove()
     audioFinal = audioArray[0]
     if audioFinal != 0:
         for i in range(1, len(audioArray)):
@@ -170,54 +173,69 @@ def createMusicFile(array):
         print('\nNo se generó ningun archivo, ya que no se encontró ninguna nota/silencio\n')
 
 #Crea el archivo de texto
-def createTextFile(array):
-    fileName = array[0]
+def createTextFile(stack):
+    fileName = stack.firstElement()
     finalName = getUniqueName(fileName, ".matf")
     textFile= open(finalName,"w")
+    ###########preguntar###########
+    array = stack.notes
     textFile.write("\n".join(map(str,array)))
     textFile.close()
     print('Tu obra "'+ finalName + '" fue guardada con éxito.\n')
 
 #Crea el array con los datos usando input
-def createArrayByInput():
-    array = []
-    newLine = "1"
-    array.append(getInput("title"))
-    array.append(getInput("tempo"))
-    while(newLine=="1"):
-        array.append(getInput("instrument"))
+def createStackByInput():
+    noteStack = Stack()
+    newLine = "N"
+    noteStack.add(getInput("title"))
+    noteStack.add(getInput("tempo"))
+    while(newLine=="N"):
+        noteStack.add(getInput("instrument"))
         exit = "1"
         while(exit=="1"):
             note  = getInput("note")
-            array.append(note)
-            if(note == "0"):
+            if(note == "Q"):
+                noteStack.add(note)
                 exit = "0"
+            elif(note == "E"):
+                lastInput = noteStack.peek()
+                print(lastInput) #no va
+                if (lastInput == "C" or lastInput == "P" or lastInput == "G" or lastInput == "N" or lastInput == "Q") or ((type (lastInput)==int) and lastInput>60) :
+                    print("No hay notas por remover")
+                    print(noteStack.notes) #no va
+                else:
+                    print(noteStack.notes) #no va
+                    removed = noteStack.remove()
+                    print("Se eliminó la nota",removed[0],"con duración",removed[1])
             else:
-                array.append(getInput("duration"))
+                noteStack.add(note)  
+                noteStack.add(getInput("duration"))          
         newLine = getInput("nextLine")
-        array.append(newLine)
-    return array
+        noteStack.add(newLine)
+    return noteStack
 
 #Crea el array con los datos usando un archivo .txt
-def createArrayByFile(file):
-    array = []
-    newLine = "1"
-    array.append(file.readline().rstrip())
-    array.append(file.readline().rstrip())
-    while(newLine=="1"):
-        array.append(file.readline().rstrip())
+def createStackByFile(file):
+    noteStack = Stack()
+    newLine = "N"
+    noteStack.add(file.readline().rstrip())
+    noteStack.add(file.readline().rstrip())
+    while(newLine=="N"):
+        noteStack.add(file.readline().rstrip())
         exit = "1"
         while(exit=="1"):
             note = file.readline().rstrip()
-            array.append(note)
-            if(note == "0"):
+            if(note == "Q"):
+                noteStack.add(note)
                 exit = "0"
             else:
-                array.append(file.readline().rstrip())
+                noteStack.add(note)  
+                noteStack.add(file.readline().rstrip()) 
         newLine = file.readline().rstrip()
-        array.append(newLine)
+        noteStack.add(newLine)
     file.close()
-    return array
+    return noteStack
+
 
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
@@ -226,9 +244,9 @@ action = ""
 while(action != 'F'):
     action = getInput("nextAction")
     if action == "A":
-        createMusicFile(createArrayByInput())
+        createMusicFile(createStackByInput())
     elif action == "T":
-        createTextFile(createArrayByInput())
+        createTextFile(createStackByInput())
     elif action == "G":
         while(True):
             textFile = input("\nIntroduzca la ruta del archivo de texto: ")
@@ -238,6 +256,6 @@ while(action != 'F'):
             else:
                 print("La ruta y/o el archivo no son válidos/no existen")
         try:
-            createMusicFile(createArrayByFile(file))
+            createMusicFile(createStackByFile(file))
         except:
             print("Hay un error en el archivo. Intentalo nuevamente con otro archivo\n")     
