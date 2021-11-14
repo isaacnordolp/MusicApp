@@ -236,7 +236,7 @@ while(action != 'F'):
                 file = open(textFile,"r")
                 break
             else:
-                print("La ruta y/o el archivo no son válidos")
+                print("La ruta y/o el archivo no son válidos/no existen")
         try:
             createMusicFile(createArrayByFile(file))
         except:
