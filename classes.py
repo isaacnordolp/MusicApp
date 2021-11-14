@@ -15,9 +15,7 @@ class Stack:
         return (note, duration)
     def firstElement(self):
         return self.notes[0]
-        
-        
-
+  
 class Queue:
     def __init__(self):
         self.notes = []
