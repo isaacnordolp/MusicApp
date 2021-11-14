@@ -35,8 +35,8 @@ def getInput(status):
             case "note":
                 while (True):
                     notValid = False
-                    userIn = input("\nInserta el nombre de la nota: ").upper()
-                    if userIn == "S":
+                    userIn = input("\nInserta el nombre de la nota. Para finalizar esta línea, digita '0': ").upper()
+                    if userIn == "S" or userIn == "0":
                         return userIn
                     elif len(userIn) == 2:
                         note = userIn[0]
@@ -72,13 +72,6 @@ def getInput(status):
                         return userIn
                     else:
                         print(notValidString+": Duración no válida\n")
-            case "nextNote":
-                while(True):
-                    userIn = input("\nPara añadir otra nota en esta línea escribe 1, si no, escribe 0: ")
-                    if(userIn == '1' or userIn == '0'):
-                        return userIn
-                    else:
-                        print(notValidString)
             case "nextLine":
                 while(True):
                     userIn = input("\nPara añadir otra linea musical escribe 1, si no, escribe 0: ")
@@ -140,18 +133,20 @@ def createMusicLine(array):
     exit = "1"
     while(exit=="1"):
         noteName = array.pop(0)
-        noteDuration = array.pop(0)
-        route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
-        audio = AudioSegment.from_file(route, format="wav")
-        #Esto es para las duraciones intermedias
-        if (noteDuration == '2.'):
-            audio = audio[0:1500]
-        elif (noteDuration == '4.'):
-            audio = audio[0:750]
-        elif (noteDuration == '8.'):
-            audio = audio[0:375]
-        audioFinal += audio
-        exit = array.pop(0)
+        if(noteName != "0"):
+            noteDuration = array.pop(0)
+            route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
+            audio = AudioSegment.from_file(route, format="wav")
+            #Esto es para las duraciones intermedias
+            if (noteDuration == '2.'):
+                audio = audio[0:1500]
+            elif (noteDuration == '4.'):
+                audio = audio[0:750]
+            elif (noteDuration == '8.'):
+                audio = audio[0:375]
+            audioFinal += audio
+        else:
+            exit ="0"
     return audioFinal
 
 #Crea el archivo de musica
@@ -164,12 +159,15 @@ def createMusicFile(array):
         audioArray.append(createMusicLine(array))
         newLine = array.pop(0)
     audioFinal = audioArray[0]
-    for i in range(1, len(audioArray)):
-        audioFinal = audioFinal.overlay(audioArray[i], position=0)
-    audioFinal = changeSpeed(audioFinal, tempo)
-    finalName = getUniqueName(fileName, ".wav")
-    audioFinal.export(finalName, format="wav")
-    print('Tu obra "'+ finalName + '" fue guardada con éxito.\n')
+    if audioFinal != 0:
+        for i in range(1, len(audioArray)):
+            audioFinal = audioFinal.overlay(audioArray[i], position=0)
+        audioFinal = changeSpeed(audioFinal, tempo)
+        finalName = getUniqueName(fileName, ".wav")
+        audioFinal.export(finalName, format="wav")
+        print('Tu obra "'+ finalName + '" fue guardada con éxito.\n')
+    else:
+        print('\nNo se generó ningun archivo, ya que no se encontró ninguna nota/silencio\n')
 
 #Crea el archivo de texto
 def createTextFile(array):
@@ -190,10 +188,12 @@ def createArrayByInput():
         array.append(getInput("instrument"))
         exit = "1"
         while(exit=="1"):
-            array.append(getInput("note"))
-            array.append(getInput("duration"))
-            exit = getInput("nextNote")
-            array.append(exit)
+            note  = getInput("note")
+            array.append(note)
+            if(note == "0"):
+                exit = "0"
+            else:
+                array.append(getInput("duration"))
         newLine = getInput("nextLine")
         array.append(newLine)
     return array
@@ -208,10 +208,12 @@ def createArrayByFile(file):
         array.append(file.readline().rstrip())
         exit = "1"
         while(exit=="1"):
-            array.append(file.readline().rstrip())
-            array.append(file.readline().rstrip())
-            exit = file.readline().rstrip()
-            array.append(exit)
+            note = file.readline().rstrip()
+            array.append(note)
+            if(note == "0"):
+                exit = "0"
+            else:
+                array.append(file.readline().rstrip())
         newLine = file.readline().rstrip()
         array.append(newLine)
     file.close()
