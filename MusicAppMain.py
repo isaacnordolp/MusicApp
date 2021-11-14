@@ -206,12 +206,9 @@ def createStackByInput():
                 exit = "0"
             elif(note == "E"):
                 lastInput = noteStack.peek()
-                print(lastInput) #no va
                 if (lastInput == "C" or lastInput == "P" or lastInput == "G" or lastInput == "N" or lastInput == "Q") or ((type (lastInput)==int) and lastInput>60) :
                     print("No hay notas por remover")
-                    print(noteStack.notes) #no va
                 else:
-                    print(noteStack.notes) #no va
                     removed = noteStack.remove()
                     print("Se eliminó la nota",removed[0],"con duración",removed[1])
             else:
