@@ -1,3 +1,4 @@
+#last version siuuuuuu
 from pydub import AudioSegment
 import os
 from classes import *
