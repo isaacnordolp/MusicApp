@@ -130,15 +130,12 @@ def changeSpeed(sound, speed):
 #Crea una linea de musica
 def createMusicLine(queue):
     instrument = queue.remove()
-    print(instrument)
     audioFinal = 0
     exit = "1"
     while(exit=="1"):
         noteName = queue.remove()
-        print(noteName)
         if(noteName != "Q"):
             noteDuration = queue.remove()
-            print(noteDuration)
             route = 'Samples/'+ instrument +'/'+durations.get(noteDuration)+'/' + noteName + '.wav' 
             audio = AudioSegment.from_file(route, format="wav")
             #Esto es para las duraciones intermedias
@@ -160,13 +157,10 @@ def createMusicFile(stack):
     queue = Queue()
     queue.notes = stack.notes
     fileName = queue.remove()
-    print(fileName)
     tempo = int(queue.remove())/120
-    print(tempo)
     while(newLine=="N"):
         audioArray.append(createMusicLine(queue))
         newLine = queue.remove()
-        print(newLine)
     audioFinal = audioArray[0]
     if audioFinal != 0:
         for i in range(1, len(audioArray)):
@@ -183,7 +177,6 @@ def createTextFile(stack):
     fileName = stack.firstElement()
     finalName = getUniqueName(fileName, ".matf")
     textFile= open(finalName,"w")
-    ###########preguntar###########
     array = stack.notes
     textFile.write("\n".join(map(str,array)))
     textFile.close()
