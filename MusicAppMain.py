@@ -86,7 +86,7 @@ def getInput(status):
                     if(userIn == 'A' or userIn == 'G' or userIn == 'T' or userIn == 'F'):
                         return userIn
                     else:
-                        print(notValidString+": Acción no válida")
+                        print(notValidString+": Acción no válida\n")
             case "tempo":
                 while(True):
                     userIn = input("\nInserta el tempo (BPM) de la pieza: ")
