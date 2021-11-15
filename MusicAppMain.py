@@ -239,7 +239,6 @@ def createStackByFile(file):
     file.close()
     return noteStack
 
-
 print("--------------------------")
 print("♪ BIENVENIDO A MUSIC APP ♪")
 print("--------------------------")
