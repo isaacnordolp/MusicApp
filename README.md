@@ -96,8 +96,8 @@ Para introducir una nota, MusicApp requiere dos datos:
  ## Líneas de música 
 En MusicApp puedes crear varias lineas de música en un mismo archivo para generar armonía.
 ![lines](/Pictures/lines.png)
-Para hacer esto, solo escribe '1' cuando aparezca la opción de crear una nueva línea:
-> `Para añadir otra linea musical escribe 1, si no, escribe 0: 1`
+Para hacer esto, solo escribe 'N' cuando aparezca la opción de crear una nueva línea:
+> `Para añadir otra linea musical escribe N, si no, escribe Q: " N`
 
 Puedes elegir entre tres instrumentos diferentes para cada línea:
 > `Elige el instrumento para esta linea (P = piano, G = Guitarra, C = Cuerdas): P`
