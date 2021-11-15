@@ -87,7 +87,7 @@ Para introducir una nota, MusicApp requiere dos datos:
       > `Inserta el nombre de la nota: Bb3`   
       > `Inserta la duración de la nota: 2.`
 
-        ![dot](/Pictures/dot.jpg)
+        ![dot](/Pictures/dot.png)
 
     - A continuación, algunos ejemplos de duraciones erroneas:
       > `5` <--- Las unicas entradas permitidas son '1', '2', '2.', '4', '4.', '8', '8.', '16'  
