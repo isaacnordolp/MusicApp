@@ -1,7 +1,6 @@
-#last version siuuuuuu
 from pydub import AudioSegment
 import os
-from classes import *
+from structures import *
 
 #Listas y diccionarios usados
 notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
