@@ -2,7 +2,7 @@ from pydub import AudioSegment
 import os
 from structures import *
 
-#Listas y diccionario usados
+#Listas y diccionarios usados
 notes =["C","D","E","F","G","A","B","C#","D#","F#","G#","A#"]
 specialNotes = {"CB":"B","DB":"C#","EB":"D#","FB":"E","GB":"F#","AB":"G#","BB":"A#","B#":"C","E#":"F"}
 durations ={'1':"whole", '2':"half", '2.':"whole", '4':"quarter",'4.':"half", '8':"eigth",'8.':"quarter",'16':"semiquaver" }
